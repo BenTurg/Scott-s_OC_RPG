@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -72,5 +73,11 @@ namespace Engine.Models
             }
         }
 
+        public ObservableCollection<GameItem> Inventory { get; set; } //ObservableCollection isnt need OnPropertyChanged as other properties. it do it by himself
+
+        public Player()
+        {
+            Inventory = new ObservableCollection<GameItem>();
+        }
     }
 }

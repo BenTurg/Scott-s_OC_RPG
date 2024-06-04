@@ -57,6 +57,7 @@
             <Label Grid.Row="5" Grid.Column="1" Content="{Binding CurrentPlayer.Level}"/>
             
         </Grid>
+        
         <!--Game Data-->
         <Grid Grid.Row="1" Grid.Column="1" Background="Beige">
             <Grid.RowDefinitions>
@@ -94,8 +95,30 @@
             </Border>
         </Grid>
 
-        <Label Grid.Row="2" Grid.Column="0" Content="Inventory/Quests" Background="BurlyWood"/>
-        
+        <!--Inventory/Quests-->
+        <Grid Grid.Row="2" Grid.Column="0" Background="BurlyWood">
+            <TabControl>
+                <TabItem Header="Inventory">
+                    <DataGrid ItemsSource="{Binding CurrentPlayer.Inventory}"
+                              AutoGenerateColumns="False"
+                              HeadersVisibility="Column">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Description"
+                                                Binding="{Binding Name}"
+                                                Width="*"/>
+                            <DataGridTextColumn Header="Description"
+                                                Binding="{Binding Price}"
+                                                Width="Auto"/>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Quests">
+
+                </TabItem>
+            </TabControl>
+        </Grid>
+
         <!--Combat/Movement Controls-->
         <Grid Grid.Row="2" Grid.Column="1" Background="Lavender">
             <Grid.RowDefinitions>
