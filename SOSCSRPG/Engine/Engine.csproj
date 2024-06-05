@@ -17,6 +17,9 @@
     <None Remove="Images\Locations\TownSquare.png" />
     <None Remove="Images\Locations\TownSquare_Fixed.png" />
     <None Remove="Images\Locations\Trader.png" />
+    <None Remove="Images\Monsters\GiantSpider.png" />
+    <None Remove="Images\Monsters\Rat.png" />
+    <None Remove="Images\Monsters\Snake.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +38,15 @@
     <Resource Include="Images\Locations\TownGate.png" />
     <Resource Include="Images\Locations\TownSquare_Fixed.png" />
     <Resource Include="Images\Locations\Trader.png" />
+    <Resource Include="Images\Monsters\GiantSpider.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Monsters\Rat.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Monsters\Snake.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
