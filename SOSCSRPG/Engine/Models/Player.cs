@@ -17,7 +17,6 @@ namespace Engine.Models
         private int _level;
         private int _gold;
 
-
         public string Name
         {
             get { return _name; }
@@ -73,11 +72,13 @@ namespace Engine.Models
             }
         }
 
-        public ObservableCollection<GameItem> Inventory { get; set; } //ObservableCollection isnt need OnPropertyChanged as other properties. it do it by himself
+        public ObservableCollection<GameItem> Inventory { get; set; }
+        public ObservableCollection<QuestStatus> Quests { get; set; }
 
         public Player()
         {
             Inventory = new ObservableCollection<GameItem>();
+            Quests = new ObservableCollection<QuestStatus>();
         }
     }
 }
