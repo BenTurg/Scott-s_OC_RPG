@@ -12,6 +12,7 @@ namespace Engine.ViewModels
     public class GameSession : BaseNotificationClass
     {
         private Location _currentLoaction;
+        private Monster _currentMonster;
         public World CurrentWorld { get; set; }
         public Player CurrentPlayer { get; set; }
         public Location CurrentLocation
@@ -27,7 +28,18 @@ namespace Engine.ViewModels
                 OnPropertyChanged(nameof(HasLocationToEast));
                 
                 GivePlayerQuestAtLocation();
+                GetMonsterAtLocation();
 
+            }
+        }
+        public Monster CurrentMonster
+        {
+            get { return _currentMonster; }
+            set
+            {
+                _currentMonster = value;
+                OnPropertyChanged(nameof(CurrentMonster));
+                OnPropertyChanged(nameof(HasMonster));
             }
         }
         public bool HasLocationToNorth
@@ -58,6 +70,16 @@ namespace Engine.ViewModels
                 return CurrentWorld.LocationAt(CurrentLocation.XCoordinate - 1, CurrentLocation.YCoordinate) != null;
             }
         }
+
+        public bool HasMonster => CurrentMonster != null; // feature of C# called expression-bodied members
+                                                          // => lambada operator (separates the input parameters on the left side to the lambda body on the right
+                                                          // another example of using it `public bool IsEven => Value % 2 == 0;`
+
+                                                          // In this case:
+                                                          // The expression CurrentMonster != null checks if CurrentMonster is not null.
+                                                          // If CurrentMonster is not null, it means there is a monster,
+                                                          // so HasMonster will return true.
+                                                          // If CurrentMonster is null, it means there is no monster, so HasMonster will return false.
 
         public GameSession()
         {
@@ -103,6 +125,10 @@ namespace Engine.ViewModels
                 if (!CurrentPlayer.Quests.Any(q => q.PlayerQuest.ID == quest.ID))
                     CurrentPlayer.Quests.Add(new QuestStatus(quest));
         }
-
+        
+        private void GetMonsterAtLocation()
+        {
+            CurrentMonster = CurrentLocation.GetMonster();
+        }
     }
 }
