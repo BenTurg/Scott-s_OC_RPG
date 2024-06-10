@@ -66,6 +66,25 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
+            <!-- Game Message -->
+            <Border Grid.Row="0" Grid.Column="0"
+                    Grid.RowSpan="2"
+                    BorderBrush="Gainsboro"
+                    BorderThickness="1">
+
+                <RichTextBox x:Name="GameMessages"
+                             Background="Beige"
+                             VerticalScrollBarVisibility="Auto">
+                    <RichTextBox.Resources>
+                        <Style TargetType="{x:Type Paragraph}">
+                            <Setter Property="Margin" Value="0"/>
+                        </Style>
+                    </RichTextBox.Resources>
+                </RichTextBox>
+                
+            </Border>
+
+
             <!-- Location information -->
             <Border Grid.Row="0" Grid.Column="1"
                     BorderBrush="Gainsboro"
@@ -187,7 +206,7 @@
                 <Button Grid.Row="0" Grid.Column="1" 
                         Height="25" Width="65" Margin="10" 
                         Click="OnClick_MoveNorth"
-                        Visibility="{Binding HasLocationToNorth, Converter={StaticResource BooleanToVisibility}}"
+                        Visibility="{Binding HasLocationToNorth,Converter={StaticResource BooleanToVisibility}}"
                         Content="North"/>
                 <Button Grid.Row="1" Grid.Column="0" 
                         Height="25" Width="65" Margin="10" 
