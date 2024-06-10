@@ -30,7 +30,13 @@ namespace Engine.Factories
             //use LINQ to find the first item matches the ID parameters. FirstOrDefault return the default value if isnt find. in this case null
             GameItem standardItem = _standardGameItems.FirstOrDefault(item => item.ItemTypeID == itemTypeID);
             if (standardItem != null)
+            { 
+                if(standardItem is Weapon)
+                {
+                    return (standardItem as Weapon).Clone();
+                }
                 return standardItem.Clone();
+            }
             else
                 return null;
         }

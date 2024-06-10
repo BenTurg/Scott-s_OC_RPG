@@ -10,6 +10,13 @@ namespace Engine.Models
 {
     public class Player : BaseNotificationClass
     {
+
+        #region Properties 
+        //The #region and #endregion directives in C# are primarily for the benefit of the developer, not the machine.
+        //They are used to organize code into collapsible sections in the code editor,
+        //which can make it easier to navigate and manage your code.
+        //in this case we divide this region to 'Properties' but it's for the developer's choise
+
         private string _name;
         private string _characterClass;
         private int _hitPoints;
@@ -73,12 +80,30 @@ namespace Engine.Models
         }
 
         public ObservableCollection<GameItem> Inventory { get; set; }
+
+        public List<GameItem> Weapons =>
+            Inventory.Where(i => i is Weapon).ToList();//The Where method returns a sequence (more specifically, an IEnumerable<GameItem>)
+                                                       //of elements from the Inventory that satisfy the condition specified
+                                                       //by the lambda expression i => i is Weapon.
+                                                       //The ToList() method is then called to convert this sequence into a List<GameItem>.
+                                                       //This is done because working with a List can be more convenient and efficient than
+                                                       //working with an IEnumerable, depending on what you plan to do with the collection
+
         public ObservableCollection<QuestStatus> Quests { get; set; }
+
+        #endregion
 
         public Player()
         {
             Inventory = new ObservableCollection<GameItem>();
             Quests = new ObservableCollection<QuestStatus>();
+        }
+
+        public void AddItemToInventory(GameItem item)
+        {
+            Inventory.Add(item);
+
+            OnPropertyChanged(nameof(Weapons));
         }
     }
 }
