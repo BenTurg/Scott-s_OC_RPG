@@ -57,5 +57,14 @@ namespace WPFUI
             GameMessages.ScrollToEnd();
         }
 
+        private void OnClick_DisplayTradeScreen(object sender, RoutedEventArgs e)
+        {
+            TradeScreen tradeScreen = new TradeScreen();
+            tradeScreen.Owner = this;
+            tradeScreen.DataContext = _gameSession;
+            tradeScreen.ShowDialog();//The User allow to click only on the new windows.
+            //tradeScreen.Show();//The user allow to click everywhere (and on the main windows).
+        }
+
     }
 }
