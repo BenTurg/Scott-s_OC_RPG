@@ -16,6 +16,8 @@ namespace Engine.ViewModels
 
         private Location _currentLoaction;
         private Monster _currentMonster;
+        private Trader _currentTrader;
+
         public World CurrentWorld { get; set; }
         public Player CurrentPlayer { get; set; }
         public Location CurrentLocation
@@ -33,6 +35,7 @@ namespace Engine.ViewModels
                 CompleteQuestsAtLocation();
                 GivePlayerQuestAtLocation();
                 GetMonsterAtLocation();
+                CurrentTrader = CurrentLocation.TradeHere;
 
             }
         }
@@ -53,6 +56,17 @@ namespace Engine.ViewModels
             }
         }
 
+        public Trader CurrentTrader
+        {
+            get { return _currentTrader; }
+            set
+            {
+                _currentTrader = value;
+                OnPropertyChanged(nameof(CurrentTrader));
+                OnPropertyChanged(nameof(HasTrader));
+            }
+        }
+
         public Weapon CurrentWeapon { get; set; }
 
         public bool HasLocationToNorth =>
@@ -64,15 +78,17 @@ namespace Engine.ViewModels
         public bool HasLocationToWest =>
             CurrentWorld.LocationAt(CurrentLocation.XCoordinate - 1, CurrentLocation.YCoordinate) != null;
 
-        public bool HasMonster => CurrentMonster != null; // feature of C# called expression-bodied members
-                                                          // => lambada operator (separates the input parameters on the left side to the lambda body on the right
-                                                          // another example of using it `public bool IsEven => Value % 2 == 0;`
+        // feature of C# called expression-bodied members
+        // => lambada operator (separates the input parameters on the left side to the lambda body on the right
+        // another example of using it `public bool IsEven => Value % 2 == 0;`
 
-                                                          // In this case:
-                                                          // The expression CurrentMonster != null checks if CurrentMonster is not null.
-                                                          // If CurrentMonster is not null, it means there is a monster,
-                                                          // so HasMonster will return true.
-                                                          // If CurrentMonster is null, it means there is no monster, so HasMonster will return false.
+        // In this case:
+        // The expression CurrentMonster != null checks if CurrentMonster is not null.
+        // If CurrentMonster is not null, it means there is a monster,
+        // so HasMonster will return true.
+        // If CurrentMonster is null, it means there is no monster, so HasMonster will return false.
+        public bool HasMonster => CurrentMonster != null; 
+        public bool HasTrader => CurrentTrader != null;
 
         public GameSession()
         {
