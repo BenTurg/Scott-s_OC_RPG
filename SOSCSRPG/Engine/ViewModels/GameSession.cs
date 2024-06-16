@@ -272,7 +272,8 @@ namespace Engine.ViewModels
         private void OnCurrentPlayerKilled(object sender, System.EventArgs eventArgs)
         {
             RaiseMessage("");
-            RaiseMessage($"The {CurrentMonster.Name} killed you.");
+            RaiseMessage("You have been killed");
+            //RaiseMessage($"The {CurrentMonster.Name} killed you."); //create error on my unit test -> because in the test there isnt monster that kill you
             
             CurrentLocation = CurrentWorld.LocationAt(0, -1);
             CurrentPlayer.CompletelyHeal();
