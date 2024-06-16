@@ -66,7 +66,7 @@ namespace Engine.Models
         public ObservableCollection<GroupedInventoryItem> GroupedInventory { get; }
 
         public List<GameItem> Weapons =>
-            Inventory.Where(i => i is Weapon).ToList();
+            Inventory.Where(i => i.Category == GameItem.ItemCategory.Weapon).ToList();
         //The Where method returns a sequence (more specifically, an IEnumerable<GameItem>)
         //of elements from the Inventory that satisfy the condition specified
         //by the lambda expression i => i is Weapon.
