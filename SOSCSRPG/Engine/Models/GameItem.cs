@@ -32,16 +32,17 @@ namespace Engine.Models
             Name = name;
             Price = price;
             IsUnique = isUnique;
+            Action = action;
         }
         
-        public void PreformAction(LivingEntity actor, LivingEntity target)
+        public void PerformAction(LivingEntity actor, LivingEntity target)
         {
             Action?.Execute(actor, target);
         }
 
         public GameItem Clone()
         {
-            return new GameItem(Category,ItemTypeID, Name, Price, IsUnique
+            return new GameItem(Category, ItemTypeID, Name, Price, IsUnique
                 , Action);
         }
         

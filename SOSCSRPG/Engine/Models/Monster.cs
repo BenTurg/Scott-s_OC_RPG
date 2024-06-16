@@ -11,19 +11,16 @@ namespace Engine.Models
     {
 
         public string ImageName { get; }
-        public int MinimumDamage { get;}
-        public int MaximumDamage { get; }
+
         public int RewardExperiencePoints { get; }
 
-
-        public Monster(string name, string imageName,int maximumHitPoints, int currentHitPoints,
-                       int minimumDamage, int maximumDamage,int rewardExperiencePoints, int gold) 
-            : base(name, maximumHitPoints, currentHitPoints, gold)
+        public Monster(string name, string imageName,
+                       int maximumHitPoints, int currentHitPoints,
+                       int rewardExperiencePoints, int gold) :
+            base(name, maximumHitPoints, currentHitPoints, gold)
         {
             ImageName = $"/Engine;component/Images/Monsters/{imageName}";
             //ImageName = string.Format("pack://application:,,,/Engine;component/Images/Monsters/{0}", imageName);
-            MinimumDamage = minimumDamage;
-            MaximumDamage = maximumDamage;
             RewardExperiencePoints = rewardExperiencePoints;
         }
     }

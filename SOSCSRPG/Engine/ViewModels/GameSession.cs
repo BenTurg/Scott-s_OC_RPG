@@ -13,42 +13,41 @@ namespace Engine.ViewModels
     public class GameSession : BaseNotificationClass
     {
         public event EventHandler<GameMessageEventArgs> OnMessageRaised;
-
+        #region Properties
         private Player _currentPlayer;
-        private Location _currentLoaction;
+        private Location _currentLocation;
         private Monster _currentMonster;
         private Trader _currentTrader;
-
+        
         public World CurrentWorld { get; }
         public Player CurrentPlayer
         {
             get { return _currentPlayer; }
             set
             {
-                if (_currentPlayer != null)
+                if(_currentPlayer != null)
                 {
-                    _currentPlayer.OnActionPreformed -= OnCurrentPlayerPerformedAction;
+                    _currentPlayer.OnActionPerformed -= OnCurrentPlayerPerformedAction;
                     _currentPlayer.OnLeveledUp -= OnCurrentPlayerLeveledUp;
                     _currentPlayer.OnKilled -= OnCurrentPlayerKilled; // meaning of 'object.event -= func' unsubscribe from the event of runnin 'func'
                 }
                 
                 _currentPlayer = value;
 
-                if (_currentPlayer != null)
+                if(_currentPlayer != null)
                 {
-                    _currentPlayer.OnActionPreformed += OnCurrentPlayerPerformedAction;
+                    _currentPlayer.OnActionPerformed += OnCurrentPlayerPerformedAction;
                     _currentPlayer.OnLeveledUp += OnCurrentPlayerLeveledUp;
                     _currentPlayer.OnKilled += OnCurrentPlayerKilled;
                 }
             }
         }
-
         public Location CurrentLocation
         {
-            get { return _currentLoaction; }
+            get { return _currentLocation; }
             set
             {
-                _currentLoaction = value;
+                _currentLocation = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasLocationToNorth));//on this OnPropertyChanged we need nameof("func")
                 OnPropertyChanged(nameof(HasLocationToSouth));//beceause we call it from another function
@@ -56,24 +55,28 @@ namespace Engine.ViewModels
                 OnPropertyChanged(nameof(HasLocationToEast));
 
                 CompleteQuestsAtLocation();
-                GivePlayerQuestAtLocation();
+                GivePlayerQuestsAtLocation();
                 GetMonsterAtLocation();
-                CurrentTrader = CurrentLocation.TradeHere;
+                CurrentTrader = CurrentLocation.TraderHere;
 
             }
         }
         public Monster CurrentMonster
-        {
+        { 
             get { return _currentMonster; }
             set
             {
                 if(_currentMonster != null)
+                {
+                    _currentMonster.OnActionPerformed -= OnCurrentMonsterPerformedAction;
                     _currentMonster.OnKilled -= OnCurrentMonsterKilled; // meaning of 'object.event -= func' unsubscribe from the event of runnin 'func'
+                }
 
                 _currentMonster = value;
 
-                if(CurrentMonster != null)
+                if(_currentMonster != null) 
                 {
+                    _currentMonster.OnActionPerformed += OnCurrentMonsterPerformedAction;
                     _currentMonster.OnKilled += OnCurrentMonsterKilled;
 
                     RaiseMessage("");
@@ -84,7 +87,6 @@ namespace Engine.ViewModels
                 OnPropertyChanged(nameof(HasMonster));
             }
         }
-
         public Trader CurrentTrader
         {
             get { return _currentTrader; }
@@ -116,6 +118,7 @@ namespace Engine.ViewModels
         // If CurrentMonster is null, it means there is no monster, so HasMonster will return false.
         public bool HasMonster => CurrentMonster != null; 
         public bool HasTrader => CurrentTrader != null;
+        #endregion
 
         public GameSession()
         {
@@ -123,7 +126,7 @@ namespace Engine.ViewModels
 
             if (!CurrentPlayer.Weapons.Any())
             {
-                CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(1001));//pointy_stick as defualt
+                CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(1001)); //pointy_stick as defualt
             }
 
             CurrentWorld = WorldFactory.CreateWorld();
@@ -194,7 +197,7 @@ namespace Engine.ViewModels
             }
         }
 
-        private void GivePlayerQuestAtLocation()
+        private void GivePlayerQuestsAtLocation()
         {
             foreach (Quest quest in CurrentLocation.QuestsAvailableHere)
             {
@@ -238,42 +241,44 @@ namespace Engine.ViewModels
             if (CurrentMonster.IsDead)
             {
                 //get another monster to fight with (on this location)
-                
                 GetMonsterAtLocation();
             }
             else
             {
-                // Let the monster attack
-                int damageToPlayer =
-                    RandomNumberGenerator.NumberBetween(CurrentMonster.MinimumDamage, CurrentMonster.MaximumDamage);
-                if (damageToPlayer == 0)
-                {
-                    RaiseMessage($"The {CurrentMonster.Name} attacks, but misses you.");
-                }
-                else
-                {
-                    RaiseMessage($"The {CurrentMonster.Name} hit you for {damageToPlayer} points.");
-                    CurrentPlayer.TakeDamage(damageToPlayer);
-                }
+                CurrentMonster.UseCurrentWeaponOn(CurrentPlayer);
+                /* before giving the monster the ability to attack with weapons
+                //Let the monster attack
+                //int damageToPlayer =
+                //    RandomNumberGenerator.NumberBetween(CurrentMonster.MinimumDamage, CurrentMonster.MaximumDamage);
+                //if (damageToPlayer == 0)
+                //{
+                //    RaiseMessage($"The {CurrentMonster.Name} attacks, but misses you.");
+                //}
+                //else
+                //{
+                //    RaiseMessage($"The {CurrentMonster.Name} hit you for {damageToPlayer} points.");
+                //    CurrentPlayer.TakeDamage(damageToPlayer);
+                }*/
             }
-        
+
         }
 
         private void OnCurrentPlayerPerformedAction(object sender, string result)
         {
             RaiseMessage(result);
         }
-
+        private void OnCurrentMonsterPerformedAction(object sender, string result)
+        {
+            RaiseMessage(result);
+        }
         private void OnCurrentPlayerKilled(object sender, System.EventArgs eventArgs)
         {
             RaiseMessage("");
             RaiseMessage("You have been killed");
             //RaiseMessage($"The {CurrentMonster.Name} killed you."); //create error on my unit test -> because in the test there isnt monster that kill you
-            
             CurrentLocation = CurrentWorld.LocationAt(0, -1);
             CurrentPlayer.CompletelyHeal();
         }
-
         private void OnCurrentMonsterKilled(object sender, System.EventArgs eventArgs)
         {
             RaiseMessage("");
@@ -291,7 +296,6 @@ namespace Engine.ViewModels
                 CurrentPlayer.AddItemToInventory(gameItem);
             }
         }
-
         private void OnCurrentPlayerLeveledUp(object sender, System.EventArgs eventArgs)
         {
             RaiseMessage($"You are now level {CurrentPlayer.Level}!");

@@ -14,8 +14,16 @@ namespace Engine.Factories
 
         static ItemFactory()
         {
+            //Player Weapons
             BuildWeapon(1001, "Pointy Stick", 1, 1, 2);
             BuildWeapon(1002, "Rusty Sword", 5, 1, 3);
+
+            //Monster Weapons
+            BuildWeapon(1501, "Snake fangs", 0, 0, 2);
+            BuildWeapon(1502, "Rat claws", 0, 0, 2);
+            BuildWeapon(1503, "Spider fangs", 0, 0, 4);
+
+            //Oter items
             BuildMiscellaneousItem(9001, "Snake fang", 1);
             BuildMiscellaneousItem(9002, "Snakeskin", 2);
             BuildMiscellaneousItem(9003, "Rat tail", 1);
@@ -38,7 +46,7 @@ namespace Engine.Factories
             //for the design pattern Command: we need to do it with two steps
             //first create GameItem weapon - and then create Action that get this weapon and belong to this weapon
             //P.S it little mess but we will try to make it cleaner later
-            GameItem weapon = new GameItem(GameItem.ItemCategory.Weapon, id, name, price);
+            GameItem weapon = new GameItem(GameItem.ItemCategory.Weapon, id, name, price,true);
             weapon.Action = new AttackWithWeapon(weapon, minimumDamage, maximumDamage);
 
             _standardGameItems.Add(weapon);

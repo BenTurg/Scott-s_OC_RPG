@@ -10,6 +10,8 @@ namespace Engine.Models
 {
     public abstract class LivingEntity : BaseNotificationClass
     {
+        #region Properties
+
         private string _name;
         private int _currentHitPoints;
         private int _maximumHitPoints;
@@ -69,14 +71,14 @@ namespace Engine.Models
             {
                 if (_currentWeapon != null)
                 {
-                    _currentWeapon.Action.OnActionPerformed -= RaiseActionPreformedEvent;
+                    _currentWeapon.Action.OnActionPerformed -= RaiseActionPerformedEvent;
                 }
 
                 _currentWeapon = value;
 
                 if(_currentWeapon != null)
                 {
-                    _currentWeapon.Action.OnActionPerformed += RaiseActionPreformedEvent;
+                    _currentWeapon.Action.OnActionPerformed += RaiseActionPerformedEvent;
                 }
 
                 OnPropertyChanged();
@@ -96,8 +98,9 @@ namespace Engine.Models
         //working with an IEnumerable, depending on what you plan to do with the collection
 
         public bool IsDead => CurrentHitPoints <= 0;
+        #endregion
 
-        public event EventHandler<string> OnActionPreformed;
+        public event EventHandler<string> OnActionPerformed;
         public event EventHandler OnKilled;
 
         protected LivingEntity(string name, int maximumHitPoints, int currentHitPoints,int gold, int level = 1)
@@ -114,7 +117,7 @@ namespace Engine.Models
 
         public void UseCurrentWeaponOn(LivingEntity target)
         {
-            CurrentWeapon.PreformAction(this, target);
+            CurrentWeapon.PerformAction(this, target);
         }
 
         public void TakeDamage(int hitPointsOfDamage)
@@ -127,9 +130,9 @@ namespace Engine.Models
             }
         }
 
-        public void Heal(int hitPointsOfHeal)
+        public void Heal(int hitPointsToHeal)
         {
-            CurrentHitPoints += hitPointsOfHeal;
+            CurrentHitPoints += hitPointsToHeal;
             
             if(CurrentHitPoints > MaximumHitPoints)
             {
@@ -174,8 +177,8 @@ namespace Engine.Models
                 //or its now unique but there alradey this group -> +1 this group
                 GroupedInventory.First(gi => gi.Item.ItemTypeID == item.ItemTypeID).Quantity++;
             }
-            
-            OnPropertyChanged();
+
+            OnPropertyChanged(nameof(Weapons));
         }
 
         public void RemoveItemFromInventory(GameItem item)
@@ -198,17 +201,18 @@ namespace Engine.Models
                 }
             }
 
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(Weapons));
         }
-
+        #region Private functions
         private void RaiseOnKilledEvent()
         {
             OnKilled?.Invoke(this, new System.EventArgs());
         }
 
-        private void RaiseActionPreformedEvent(object sender, string result)
+        private void RaiseActionPerformedEvent(object sender, string result)
         {
-            OnActionPreformed?.Invoke(this, result);
+            OnActionPerformed?.Invoke(this, result);
         }
+        #endregion
     }
 }

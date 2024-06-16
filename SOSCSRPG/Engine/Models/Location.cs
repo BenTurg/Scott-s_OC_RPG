@@ -18,7 +18,7 @@ namespace Engine.Models
 
         public List<MonsterEncounter> MonstersHere { get; } = new List<MonsterEncounter>();
 
-        public Trader TradeHere { get; set; }
+        public Trader TraderHere { get; set; }
 
         public Location(int xCoordinate, int yCoordinate, string name, string description,
             string imageName)
